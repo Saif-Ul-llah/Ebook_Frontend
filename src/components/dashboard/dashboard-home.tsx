@@ -12,12 +12,17 @@ import { Button, LinkButton } from "../ui/button";
 export function DashboardHome() {
   const router = useRouter();
   const token = useAuthStore((state) => state.accessToken);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const logout = useAuthStore((state) => state.logout);
   const [manuscripts, setManuscripts] = useState<Manuscript[]>([]);
   const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
     if (!token) {
       router.replace("/auth/login");
       return;
@@ -31,7 +36,7 @@ export function DashboardHome() {
         setMessage(error instanceof Error ? error.message : "Unable to load manuscripts.");
       }
     });
-  }, [router, token]);
+  }, [hasHydrated, router, token]);
 
   return (
     <main className="min-h-screen bg-cream">
@@ -68,6 +73,7 @@ export function DashboardHome() {
         </section>
 
         <section className="grid gap-4">
+          {!hasHydrated ? <p className="font-bold text-steel">Restoring session...</p> : null}
           {isPending ? <p className="font-bold text-steel">Loading manuscripts...</p> : null}
           {message ? <p className="font-bold text-crimson">{message}</p> : null}
           {!isPending && manuscripts.length === 0 ? (

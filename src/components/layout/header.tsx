@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Menu, Phone, X } from "lucide-react";
+import { LogOut, Mail, Menu, Phone, UserRound, X } from "lucide-react";
 import { BRAND } from "@/lib/constants";
 import { serviceColumns, services } from "@/lib/services-data";
+import { useAuthStore } from "@/store/auth-store";
 import { useUiStore } from "@/store/ui-store";
 import { LinkButton } from "../ui/button";
 
@@ -16,10 +17,14 @@ const navItems = [
 
 export function Header() {
   const { isMobileNavOpen, toggleMobileNav, closeMobileNav } = useUiStore();
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
+  const logout = useAuthStore((state) => state.logout);
+  const isLoggedIn = hasHydrated && Boolean(accessToken);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-navy/10 bg-cream/95 backdrop-blur">
-      <div className="bg-navy text-white">
+    <header className="sticky top-0 z-50 border-b border-navy/10 bg-white/95 shadow-sm backdrop-blur">
+      <div className="bg-darkNavy text-white">
         <div className="section-shell flex flex-col gap-2 py-2 text-xs font-bold sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-4">
             <a className="inline-flex items-center gap-2" href={`tel:${BRAND.phone}`}>
@@ -38,16 +43,27 @@ export function Header() {
       </div>
 
       <div className="section-shell flex min-h-20 items-center justify-between gap-4 py-3">
-        <Link className="relative h-12 w-48 shrink-0 sm:w-56" href="/" onClick={closeMobileNav}>
-          <Image
-            src="/brand/noble_ink_logo_horizontal.svg"
-            alt={BRAND.name}
-            fill
-            priority
-            className="object-contain object-left"
-          />
+        <Link
+          className="flex shrink-0 items-center gap-3"
+          href="/"
+          onClick={closeMobileNav}
+        >
+          <span className="relative size-12 overflow-hidden rounded-md bg-cream">
+            <Image
+              src="/brand/noble_ink_logo_transparent_800x800.png"
+              alt=""
+              fill
+              priority
+              className="object-contain"
+            />
+          </span>
+          <span className="leading-none">
+            <span className="block text-xl font-black uppercase text-navy">Noble Ink</span>
+            <span className="block text-[11px] font-black uppercase tracking-normal text-steel">
+              Studios
+            </span>
+          </span>
         </Link>
-
         <nav className="hidden items-center gap-7 text-sm font-black uppercase text-navy lg:flex">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="hover:text-crimson">
@@ -99,12 +115,31 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <LinkButton href="/auth/login" variant="ghost">
-            Login
-          </LinkButton>
-          <LinkButton href="/auth/register" variant="secondary">
-            Sign Up
-          </LinkButton>
+          {isLoggedIn ? (
+            <>
+              <LinkButton href="/dashboard" variant="secondary">
+                <UserRound size={17} aria-hidden="true" />
+                Dashboard
+              </LinkButton>
+              <button
+                type="button"
+                onClick={logout}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-navy/20 bg-white/45 px-5 py-3 text-sm font-black uppercase text-navy transition hover:border-crimson/40 hover:text-crimson"
+              >
+                <LogOut size={17} aria-hidden="true" />
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <LinkButton href="/auth/login" variant="ghost">
+                Login
+              </LinkButton>
+              <LinkButton href="/auth/register" variant="secondary">
+                Sign Up
+              </LinkButton>
+            </>
+          )}
           <LinkButton href="/#manuscript">Consult</LinkButton>
         </div>
 
@@ -148,14 +183,32 @@ export function Header() {
                 </div>
               </div>
             ))}
-            <div className="grid gap-2 sm:grid-cols-2">
-              <LinkButton href="/auth/login" variant="ghost" onClick={closeMobileNav}>
-                Login
-              </LinkButton>
-              <LinkButton href="/auth/register" variant="secondary" onClick={closeMobileNav}>
-                Sign Up
-              </LinkButton>
-            </div>
+            {isLoggedIn ? (
+              <div className="grid gap-2 sm:grid-cols-2">
+                <LinkButton href="/dashboard" variant="secondary" onClick={closeMobileNav}>
+                  Dashboard
+                </LinkButton>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    closeMobileNav();
+                  }}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-navy/20 bg-white/45 px-5 py-3 text-sm font-black uppercase text-navy transition hover:border-crimson/40 hover:text-crimson"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-2 sm:grid-cols-2">
+                <LinkButton href="/auth/login" variant="ghost" onClick={closeMobileNav}>
+                  Login
+                </LinkButton>
+                <LinkButton href="/auth/register" variant="secondary" onClick={closeMobileNav}>
+                  Sign Up
+                </LinkButton>
+              </div>
+            )}
             <LinkButton href="/#manuscript" onClick={closeMobileNav}>
               Consult
             </LinkButton>
