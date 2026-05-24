@@ -17,6 +17,7 @@ const initialPayload: ManuscriptPayload = {
   projectTitle: "",
   genre: "",
   message: "",
+  manuscript: null,
 };
 
 export function ManuscriptForm() {
@@ -25,7 +26,7 @@ export function ManuscriptForm() {
   const [message, setMessage] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  const updateField = (field: keyof ManuscriptPayload, value: string) => {
+  const updateField = (field: keyof ManuscriptPayload, value: string | File | null) => {
     setPayload((current) => ({ ...current, [field]: value }));
   };
 
@@ -76,10 +77,18 @@ export function ManuscriptForm() {
         />
       </label>
       <div className="mt-4 rounded-md border border-dashed border-navy/25 bg-cream p-5">
-        <p className="text-sm font-black text-navy">Please upload your manuscript</p>
-        <div className="mt-3 rounded-md border border-navy/10 bg-white p-5 text-center text-sm font-semibold text-steel">
-          File storage is not enabled in this version. Submit the brief now and send files after consultation.
-        </div>
+        <label className="grid gap-3 text-sm font-black text-navy">
+          Please upload your manuscript
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx,.txt"
+            onChange={(event) => updateField("manuscript", event.target.files?.[0] ?? null)}
+            className="rounded-md border border-navy/10 bg-white p-4 text-sm font-semibold text-steel file:mr-4 file:rounded-md file:border-0 file:bg-navy file:px-4 file:py-2 file:text-sm file:font-black file:text-white"
+          />
+        </label>
+        <p className="mt-3 text-xs font-semibold text-steel">
+          Accepted formats: PDF, DOC, DOCX, TXT. Maximum size: 20 MB.
+        </p>
       </div>
       <p className="mt-3 text-xs font-semibold text-steel">
         Secure file uploads are planned for the next backend storage phase. This form captures project metadata now.

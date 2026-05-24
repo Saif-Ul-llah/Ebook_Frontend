@@ -18,9 +18,11 @@ const navItems = [
 export function Header() {
   const { isMobileNavOpen, toggleMobileNav, closeMobileNav } = useUiStore();
   const accessToken = useAuthStore((state) => state.accessToken);
+  const user = useAuthStore((state) => state.user);
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const logout = useAuthStore((state) => state.logout);
   const isLoggedIn = hasHydrated && Boolean(accessToken);
+  const accountHref = user?.role === "ADMIN" ? "/admin" : "/dashboard";
 
   return (
     <header className="sticky top-0 z-50 border-b border-navy/10 bg-white/95 shadow-sm backdrop-blur">
@@ -117,9 +119,9 @@ export function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           {isLoggedIn ? (
             <>
-              <LinkButton href="/dashboard" variant="secondary">
+              <LinkButton href={accountHref} variant="secondary">
                 <UserRound size={17} aria-hidden="true" />
-                Dashboard
+                {user?.role === "ADMIN" ? "Admin" : "Dashboard"}
               </LinkButton>
               <button
                 type="button"
@@ -185,8 +187,8 @@ export function Header() {
             ))}
             {isLoggedIn ? (
               <div className="grid gap-2 sm:grid-cols-2">
-                <LinkButton href="/dashboard" variant="secondary" onClick={closeMobileNav}>
-                  Dashboard
+                <LinkButton href={accountHref} variant="secondary" onClick={closeMobileNav}>
+                  {user?.role === "ADMIN" ? "Admin" : "Dashboard"}
                 </LinkButton>
                 <button
                   type="button"

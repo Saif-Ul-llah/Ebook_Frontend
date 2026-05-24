@@ -29,7 +29,7 @@ export function LoginForm() {
                 throw new Error("Login requires verification before continuing.");
               }
               setTokens(result.data);
-              router.push("/dashboard");
+              router.push(result.data.user?.role === "ADMIN" ? "/admin" : "/dashboard");
             } catch (error) {
               setMessage(error instanceof Error ? error.message : "Login failed.");
             }

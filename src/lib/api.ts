@@ -1,5 +1,11 @@
 import { API_BASE_URL } from "./constants";
-import type { ApiResponse, AuthTokens, Manuscript, ManuscriptPayload } from "./types";
+import type {
+  AdminOverview,
+  ApiResponse,
+  AuthTokens,
+  Manuscript,
+  ManuscriptPayload,
+} from "./types";
 
 type RequestOptions = {
   token?: string | null;
@@ -10,10 +16,11 @@ async function request<T>(
   init: RequestInit = {},
   options: RequestOptions = {}
 ) {
+  const isFormData = init.body instanceof FormData;
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
       ...init.headers,
     },
@@ -55,11 +62,26 @@ export function forgotPassword(email: string) {
 }
 
 export function submitManuscript(payload: ManuscriptPayload, token?: string | null) {
+  const formData = new FormData();
+  formData.append("fullName", payload.fullName);
+  formData.append("lastName", payload.lastName ?? "");
+  formData.append("email", payload.email);
+  formData.append("phoneNumber", payload.phoneNumber);
+  formData.append("serviceType", payload.serviceType);
+  formData.append("projectTitle", payload.projectTitle);
+  formData.append("genre", payload.genre);
+  formData.append("message", payload.message ?? "");
+
+  if (payload.manuscript) {
+    formData.append("manuscript", payload.manuscript);
+  }
+
   return request<Manuscript>(
     "/manuscripts",
     {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: formData,
+      headers: {},
     },
     { token }
   );
@@ -67,4 +89,12 @@ export function submitManuscript(payload: ManuscriptPayload, token?: string | nu
 
 export function getMyManuscripts(token: string) {
   return request<Manuscript[]>("/my-manuscripts", {}, { token });
+}
+
+export function getAdminOverview(token: string) {
+  return request<AdminOverview>("/admin/overview", {}, { token });
+}
+
+export function getAdminManuscripts(token: string) {
+  return request<Manuscript[]>("/admin/manuscripts", {}, { token });
 }

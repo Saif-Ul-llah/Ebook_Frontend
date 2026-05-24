@@ -98,6 +98,18 @@ export function DashboardHome() {
                 </span>
               </div>
               {item.message ? <p className="mt-4 text-sm leading-7 text-steel">{item.message}</p> : null}
+              {item.fileName ? (
+                <p className="mt-4 text-sm font-black text-navy">
+                  Manuscript file:{" "}
+                  {item.fileUrl ? (
+                    <a className="text-crimson hover:text-deepCrimson" href={item.fileUrl} target="_blank">
+                      {item.fileName}
+                    </a>
+                  ) : (
+                    item.fileName
+                  )}
+                </p>
+              ) : null}
             </article>
           ))}
         </section>
