@@ -36,7 +36,7 @@ export function AdminDashboard() {
     }
 
     if (!token) {
-      router.replace("/admin/login");
+      router.replace("/auth/login");
       return;
     }
 
@@ -80,7 +80,7 @@ export function AdminDashboard() {
               variant="ghost"
               onClick={() => {
                 logout();
-                router.push("/admin/login");
+                router.push("/auth/login");
               }}
             >
               <LogOut size={17} aria-hidden="true" />
