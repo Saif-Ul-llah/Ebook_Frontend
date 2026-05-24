@@ -102,6 +102,9 @@ export function Header() {
           <LinkButton href="/auth/login" variant="ghost">
             Login
           </LinkButton>
+          <LinkButton href="/auth/register" variant="secondary">
+            Sign Up
+          </LinkButton>
           <LinkButton href="/#manuscript">Consult</LinkButton>
         </div>
 
@@ -145,6 +148,14 @@ export function Header() {
                 </div>
               </div>
             ))}
+            <div className="grid gap-2 sm:grid-cols-2">
+              <LinkButton href="/auth/login" variant="ghost" onClick={closeMobileNav}>
+                Login
+              </LinkButton>
+              <LinkButton href="/auth/register" variant="secondary" onClick={closeMobileNav}>
+                Sign Up
+              </LinkButton>
+            </div>
             <LinkButton href="/#manuscript" onClick={closeMobileNav}>
               Consult
             </LinkButton>

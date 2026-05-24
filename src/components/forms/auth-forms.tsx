@@ -42,9 +42,14 @@ export function LoginForm() {
           {isPending ? "Signing in" : "Sign in"}
         </Button>
         {message ? <p className="text-sm font-bold text-crimson">{message}</p> : null}
-        <Link href="/auth/forgot-password" className="text-sm font-black text-navy hover:text-crimson">
-          Forgot password?
-        </Link>
+        <div className="flex flex-col gap-2 text-sm font-black text-navy sm:flex-row sm:justify-between">
+          <Link href="/auth/forgot-password" className="hover:text-crimson">
+            Forgot password?
+          </Link>
+          <Link href="/auth/register" className="hover:text-crimson">
+            Create account
+          </Link>
+        </div>
       </form>
     </AuthCard>
   );
@@ -91,6 +96,12 @@ export function RegisterForm() {
         </Button>
         {message ? <p className="text-sm font-bold text-crimson">{message}</p> : null}
       </form>
+      <p className="mt-5 text-sm font-black text-navy">
+        Already have an account?{" "}
+        <Link href="/auth/login" className="text-crimson hover:text-deepCrimson">
+          Sign in
+        </Link>
+      </p>
     </AuthCard>
   );
 }
