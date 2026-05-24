@@ -1,6 +1,7 @@
 import { API_BASE_URL } from "./constants";
 import type {
   AdminOverview,
+  AdminUser,
   ApiResponse,
   AuthTokens,
   Manuscript,
@@ -102,10 +103,49 @@ export function claimMyManuscripts(token: string) {
   );
 }
 
+export function updateMyManuscript(
+  token: string,
+  manuscriptId: string,
+  payload: ManuscriptPayload
+) {
+  return request<Manuscript>(
+    `/my-manuscripts/${manuscriptId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        fullName: payload.fullName,
+        lastName: payload.lastName ?? "",
+        email: payload.email,
+        phoneNumber: payload.phoneNumber,
+        serviceType: payload.serviceType,
+        projectTitle: payload.projectTitle,
+        genre: payload.genre,
+        message: payload.message ?? "",
+      }),
+    },
+    { token }
+  );
+}
+
 export function getAdminOverview(token: string) {
   return request<AdminOverview>("/admin/overview", {}, { token });
 }
 
 export function getAdminManuscripts(token: string) {
   return request<Manuscript[]>("/admin/manuscripts", {}, { token });
+}
+
+export function getAdminUsers(token: string) {
+  return request<AdminUser[]>("/admin/users", {}, { token });
+}
+
+export function updateAdminUserStatus(token: string, userId: string, isActive: boolean) {
+  return request<AdminUser>(
+    `/admin/users/${userId}/status`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ isActive }),
+    },
+    { token }
+  );
 }

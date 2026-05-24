@@ -53,6 +53,9 @@ export type AdminOverview = {
     users: number;
     manuscripts: number;
     todayManuscripts: number;
+    manuscriptsWithFiles: number;
+    activeUsers: number;
+    adminUsers: number;
   };
   statuses: {
     new: number;
@@ -64,5 +67,20 @@ export type AdminOverview = {
     serviceType: string;
     count: number;
   }>;
+  genreBreakdown: Array<{
+    genre: string;
+    count: number;
+  }>;
   recentManuscripts: Manuscript[];
+  recentUsers: AdminUser[];
+};
+
+export type AdminUser = {
+  id: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  role: AuthUser["role"];
+  isActive: boolean;
+  createdAt: string;
 };

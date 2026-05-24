@@ -12,7 +12,6 @@ import { LinkButton } from "../ui/button";
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/dashboard", label: "Dashboard" },
 ];
 
 export function Header() {

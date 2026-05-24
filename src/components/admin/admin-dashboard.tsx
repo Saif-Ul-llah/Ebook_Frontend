@@ -6,8 +6,10 @@ import { useRouter } from "next/navigation";
 import {
   Activity,
   BarChart3,
+  BookOpen,
   FileText,
   LogOut,
+  Paperclip,
   ShieldCheck,
   TrendingUp,
   Users,
@@ -64,6 +66,12 @@ export function AdminDashboard() {
             Noble Ink Admin
           </Link>
           <div className="flex gap-3">
+            <Button type="button" variant="ghost" onClick={() => router.push("/admin/users")}>
+              Users
+            </Button>
+            <Button type="button" variant="ghost" onClick={() => router.push("/admin/manuscripts")}>
+              Manuscripts
+            </Button>
             <Button type="button" variant="ghost" onClick={() => router.push("/")}>
               View Site
             </Button>
@@ -104,6 +112,10 @@ export function AdminDashboard() {
           <MetricCard icon={Users} label="Registered users" value={totals?.users ?? 0} />
           <MetricCard icon={TrendingUp} label="Today" value={totals?.todayManuscripts ?? 0} />
           <MetricCard icon={Activity} label="Active pipeline" value={(statuses?.new ?? 0) + (statuses?.inReview ?? 0) + (statuses?.contacted ?? 0)} />
+          <MetricCard icon={Paperclip} label="Uploaded files" value={totals?.manuscriptsWithFiles ?? 0} />
+          <MetricCard icon={ShieldCheck} label="Active users" value={totals?.activeUsers ?? 0} />
+          <MetricCard icon={Users} label="Admins" value={totals?.adminUsers ?? 0} />
+          <MetricCard icon={BookOpen} label="Closed projects" value={statuses?.closed ?? 0} />
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -142,6 +154,45 @@ export function AdminDashboard() {
               {overview?.serviceBreakdown.length === 0 ? (
                 <p className="text-sm font-semibold text-steel">No service data yet.</p>
               ) : null}
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-2">
+          <div className="rounded-md border border-navy/10 bg-white p-6 shadow-soft">
+            <h2 className="text-sm font-black uppercase text-navy">Genre demand</h2>
+            <div className="mt-5 grid gap-3">
+              {(overview?.genreBreakdown ?? []).map((item) => (
+                <div key={item.genre} className="flex items-center justify-between rounded-md bg-cream p-4">
+                  <span className="font-black text-navy">{item.genre}</span>
+                  <span className="font-serif text-2xl font-black text-crimson">{item.count}</span>
+                </div>
+              ))}
+              {overview?.genreBreakdown.length === 0 ? (
+                <p className="text-sm font-semibold text-steel">No genre data yet.</p>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="rounded-md border border-navy/10 bg-white p-6 shadow-soft">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-black uppercase text-navy">Recent users</h2>
+              <Link href="/admin/users" className="text-sm font-black text-crimson hover:text-deepCrimson">
+                Manage users
+              </Link>
+            </div>
+            <div className="mt-5 grid gap-3">
+              {(overview?.recentUsers ?? []).map((item) => (
+                <div key={item.id} className="flex items-center justify-between gap-4 rounded-md bg-cream p-4">
+                  <div>
+                    <p className="font-black text-navy">{item.fullName}</p>
+                    <p className="text-sm font-semibold text-steel">{item.email}</p>
+                  </div>
+                  <span className="rounded-md bg-white px-3 py-2 text-xs font-black uppercase text-navy">
+                    {item.role}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
