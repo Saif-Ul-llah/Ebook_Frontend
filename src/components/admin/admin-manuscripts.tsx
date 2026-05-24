@@ -22,7 +22,7 @@ export function AdminManuscripts() {
     }
 
     if (!token) {
-      router.replace("/admin/login");
+      router.replace("/auth/login");
       return;
     }
 

@@ -24,6 +24,7 @@ export function ManuscriptForm() {
   const token = useAuthStore((state) => state.accessToken);
   const [payload, setPayload] = useState(initialPayload);
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState<"success" | "error" | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const updateField = (field: keyof ManuscriptPayload, value: string | File | null) => {
@@ -37,13 +38,16 @@ export function ManuscriptForm() {
       onSubmit={(event) => {
         event.preventDefault();
         setMessage("");
+        setMessageType(null);
         startTransition(async () => {
           try {
             await submitManuscript(payload, token);
             setPayload(initialPayload);
             setMessage("Your project brief was submitted.");
+            setMessageType("success");
           } catch (error) {
             setMessage(error instanceof Error ? error.message : "Submission failed.");
+            setMessageType("error");
           }
         });
       }}
@@ -98,7 +102,11 @@ export function ManuscriptForm() {
           <Send size={17} aria-hidden="true" />
           {isPending ? "Submitting" : "Submit brief"}
         </Button>
-        {message ? <p className="text-sm font-bold text-crimson">{message}</p> : null}
+        {message ? (
+          <p className={`text-sm font-bold ${messageType === "success" ? "text-green-700" : "text-crimson"}`}>
+            {message}
+          </p>
+        ) : null}
       </div>
     </form>
   );

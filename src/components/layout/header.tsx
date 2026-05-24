@@ -71,11 +71,11 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <div className="group relative">
+          <div className="group static">
             <Link href="/services" className="hover:text-crimson">
               Popular
             </Link>
-            <div className="invisible absolute right-0 top-full grid w-[720px] grid-cols-3 gap-2 rounded-md border border-navy/10 bg-white p-4 opacity-0 shadow-soft transition group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute left-1/2 top-full grid w-[min(720px,calc(100vw-32px))] -translate-x-1/2 grid-cols-3 gap-2 rounded-md border border-navy/10 bg-white p-4 opacity-0 shadow-soft transition group-hover:visible group-hover:opacity-100">
               {services.map((service) => (
                 <Link
                   key={service.slug}
@@ -90,11 +90,11 @@ export function Header() {
               ))}
             </div>
           </div>
-          <div className="group relative">
+          <div className="group static">
             <Link href="/services" className="hover:text-crimson">
               All Services
             </Link>
-            <div className="invisible absolute right-0 top-full grid w-[900px] grid-cols-5 gap-5 rounded-md border border-navy/10 bg-white p-5 opacity-0 shadow-soft transition group-hover:visible group-hover:opacity-100">
+            <div className="invisible absolute left-1/2 top-full grid w-[min(1000px,calc(100vw-32px))] -translate-x-1/2 grid-cols-5 gap-5 rounded-md border border-navy/10 bg-white p-5 opacity-0 shadow-soft transition group-hover:visible group-hover:opacity-100">
               {serviceColumns.map((column) => (
                 <div key={column.title}>
                   <h3 className="text-xs font-black uppercase text-crimson">{column.title}</h3>
