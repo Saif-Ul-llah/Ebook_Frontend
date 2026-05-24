@@ -21,7 +21,7 @@ export function AdminUsers() {
     if (!hasHydrated) return;
 
     if (!token) {
-      router.replace("/admin/login");
+      router.replace("/auth/login");
       return;
     }
 
