@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { FileText, LogOut, PlusCircle } from "lucide-react";
-import { getMyManuscripts } from "@/lib/api";
+import { claimMyManuscripts } from "@/lib/api";
 import type { Manuscript } from "@/lib/types";
 import { useAuthStore } from "@/store/auth-store";
 import { Button, LinkButton } from "../ui/button";
@@ -30,7 +30,7 @@ export function DashboardHome() {
 
     startTransition(async () => {
       try {
-        const result = await getMyManuscripts(token);
+        const result = await claimMyManuscripts(token);
         setManuscripts(result.data);
       } catch (error) {
         setMessage(error instanceof Error ? error.message : "Unable to load manuscripts.");

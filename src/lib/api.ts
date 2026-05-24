@@ -91,6 +91,17 @@ export function getMyManuscripts(token: string) {
   return request<Manuscript[]>("/my-manuscripts", {}, { token });
 }
 
+export function claimMyManuscripts(token: string) {
+  return request<Manuscript[]>(
+    "/my-manuscripts/claim",
+    {
+      method: "POST",
+      body: JSON.stringify({}),
+    },
+    { token }
+  );
+}
+
 export function getAdminOverview(token: string) {
   return request<AdminOverview>("/admin/overview", {}, { token });
 }
