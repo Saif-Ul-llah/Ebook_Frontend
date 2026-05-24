@@ -8,7 +8,7 @@ export function Hero() {
       <div className="section-shell grid min-h-[680px] items-center gap-10 py-14 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full border border-crimson/20 bg-white/60 px-4 py-2 text-xs font-black uppercase text-crimson">
-            <Sparkles size={16} aria-hidden="true" />
+            {/* <Sparkles size={16} aria-hidden="true" /> */}
             Your story. Expertly told.
           </p>
           <h1 className="mt-6 font-serif text-5xl font-black leading-none text-navy sm:text-6xl lg:text-7xl">
